@@ -18,12 +18,12 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
-
+from apps.core.views import home
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('apps.core.urls')),   # homepage
-
+    #path('', include('apps.core.urls')),   # homepage
+    path('', home, name='home'),   
     path('accounts/', include('apps.accounts.urls')),
     path('gigs/', include('apps.gigs.urls')),
     path('dashboard/', include('apps.dashboard.urls')),
