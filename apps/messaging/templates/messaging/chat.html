@@ -1,0 +1,116 @@
+{% extends "dashboard_layout.html" %}
+
+{% block content %}
+
+<div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg flex flex-col h-[75vh]">
+
+    <!-- Header -->
+    <div class="p-6 border-b flex justify-between items-center">
+        <h2 class="text-xl font-semibold">
+            Conversation with
+            {% if request.user == conversation.client %}
+                {{ conversation.freelancer.username }}
+            {% else %}
+                {{ conversation.client.username }}
+            {% endif %}
+        </h2>
+
+        <a href="{% url 'my_conversations' %}"
+           class="text-purple-600 hover:underline text-sm">
+            ← Back
+        </a>
+    </div>
+
+    <!-- Messages -->
+    <div class="flex-1 p-6 overflow-y-auto bg-gray-50 space-y-4">
+
+        {% for message in messages %}
+
+            {% if message.sender == request.user %}
+                <div class="flex justify-end">
+                    <div class="bg-gradient-to-r from-purple-600 to-indigo-500 text-white px-6 py-3 rounded-2xl max-w-xs shadow">
+                        {% if message.content %}
+                            {{ message.content }}
+                        {% endif %}
+
+                        {% if message.file %}
+                            <div class="mt-2">
+                                <a href="{{ message.file.url }}"
+                                   class="text-purple-200 underline text-sm"
+                                   target="_blank">
+                                    Download {{ message.file.name|cut:"chat_files/" }}
+                                </a>
+                            </div>
+                        {% endif %}
+
+                        <div class="text-xs text-purple-200 mt-2 text-right">
+                            {{ message.timestamp|time:"H:i" }}
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="flex justify-start">
+                    <div class="bg-white px-6 py-3 rounded-2xl max-w-xs shadow">
+                        {% if message.content %}
+                            {{ message.content }}
+                        {% endif %}
+
+                        {% if message.file %}
+                            <div class="mt-2">
+                                <a href="{{ message.file.url }}"
+                                   class="text-purple-600 underline text-sm"
+                                   target="_blank">
+                                    Download {{ message.file.name|cut:"chat_files/" }}
+                                </a>
+                            </div>
+                        {% endif %}
+
+                        <div class="text-xs text-gray-400 mt-2">
+                            {{ message.timestamp|time:"H:i" }}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+        {% empty %}
+            <p class="text-center text-gray-400 mt-10">
+                No messages yet.
+            </p>
+        {% endfor %}
+
+    </div>
+
+    <!-- Input -->
+    <div class="p-6 border-t bg-white">
+
+        <form method="post" enctype="multipart/form-data" class="flex gap-3 flex-wrap">
+            {% csrf_token %}
+
+            <div class="flex-1 min-w-[220px]">
+                {{ form.content }}
+            </div>
+
+            <label for="id_message_file"
+                   class="inline-flex items-center cursor-pointer px-4 py-3 rounded-full border border-gray-300 bg-gray-50 text-gray-700 hover:bg-gray-100 transition text-sm font-medium">
+                Attach File
+            </label>
+            {{ form.file }}
+
+            <button type="submit"
+                    class="bg-primary text-white px-6 py-3 rounded-full hover:bg-purple-700 transition">
+                Send
+            </button>
+
+            {% if form.errors %}
+                <p class="w-full text-sm text-rose-600 mt-1">
+                    {{ form.non_field_errors|striptags }}
+                </p>
+            {% endif %}
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

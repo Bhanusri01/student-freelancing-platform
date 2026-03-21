@@ -1,0 +1,264 @@
+﻿{% extends "dashboard_layout.html" %}
+
+{% block content %}
+<section class="space-y-8">
+
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 md:p-10 shadow-2xl">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+            <div>
+                <p class="text-teal-300 text-xs uppercase tracking-wider font-semibold">Freelancer Workspace</p>
+                <h1 class="text-3xl md:text-4xl font-bold text-white mt-2">Student Dashboard</h1>
+                <p class="text-slate-300 mt-3 max-w-2xl">
+                    Manage your gigs, track ongoing orders, and monitor earnings from one place.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 w-full lg:w-auto">
+                <a href="{% url 'create_gig' %}" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold text-center px-5 py-3 rounded-xl transition">
+                    Create Gig
+                </a>
+                <a href="{% url 'my_orders' %}" class="bg-slate-800 hover:bg-slate-700 text-slate-100 font-semibold text-center px-5 py-3 rounded-xl border border-slate-700 transition">
+                    View Orders
+                </a>
+                <a href="{% url 'wallet' %}" class="bg-slate-800 hover:bg-slate-700 text-slate-100 font-semibold text-center px-5 py-3 rounded-xl border border-slate-700 transition">
+                    Wallet
+                </a>
+                <a href="{% url 'my_conversations' %}" class="bg-slate-800 hover:bg-slate-700 text-slate-100 font-semibold text-center px-5 py-3 rounded-xl border border-slate-700 transition">
+                    Messages
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-6">
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-lg transition">
+            <p class="text-xs uppercase tracking-wide text-slate-500">Total Gigs</p>
+            <p class="text-4xl font-bold text-slate-900 mt-2">{{ gigs_count }}</p>
+            <p class="text-sm text-slate-500 mt-2">Services currently listed</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-lg transition">
+            <p class="text-xs uppercase tracking-wide text-slate-500">Orders</p>
+            <p class="text-4xl font-bold text-slate-900 mt-2">{{ orders_count }}</p>
+            <p class="text-sm text-slate-500 mt-2">All-time client purchases</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-lg transition">
+            <p class="text-xs uppercase tracking-wide text-slate-500">Wallet Balance</p>
+            <p class="text-4xl font-bold text-teal-700 mt-2">Rs {{ wallet_balance }}</p>
+            <p class="text-sm text-slate-500 mt-2">Available for withdrawal</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-lg transition">
+            <p class="text-xs uppercase tracking-wide text-slate-500">Average Rating</p>
+            <p class="text-4xl font-bold text-slate-900 mt-2">{{ avg_rating }}</p>
+            <p class="text-sm text-slate-500 mt-2">Based on completed work</p>
+        </div>
+    </div>
+
+    <div class="grid xl:grid-cols-3 gap-6">
+        <div class="xl:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm p-7">
+            <h2 class="text-xl font-bold text-slate-800">Performance Snapshot</h2>
+            <p class="text-slate-500 mt-2">A quick overview of your freelancing momentum.</p>
+
+            <div class="mt-6 space-y-5">
+                <div>
+                    <div class="flex justify-between text-sm mb-2">
+                        <span class="text-slate-600 font-medium">Gig Activity</span>
+                        <span class="text-slate-500">{{ gigs_count }} gigs</span>
+                    </div>
+                    <div class="h-2 bg-slate-200 rounded-full overflow-hidden">
+                        <div class="h-full bg-teal-500 rounded-full" style="width:{% if gigs_count > 0 %}100{% else %}20{% endif %}%"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between text-sm mb-2">
+                        <span class="text-slate-600 font-medium">Order Flow</span>
+                        <span class="text-slate-500">{{ orders_count }} orders</span>
+                    </div>
+                    <div class="h-2 bg-slate-200 rounded-full overflow-hidden">
+                        <div class="h-full bg-slate-800 rounded-full" style="width:{% if orders_count > 0 %}100{% else %}20{% endif %}%"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between text-sm mb-2">
+                        <span class="text-slate-600 font-medium">Client Satisfaction</span>
+                        <span class="text-slate-500">{{ avg_rating }}/5</span>
+                    </div>
+                    <div class="h-2 bg-slate-200 rounded-full overflow-hidden">
+                        <div class="h-full bg-teal-600 rounded-full" style="width:{% widthratio avg_rating 5 100 %}%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-7">
+            <h2 class="text-xl font-bold text-slate-800">Quick Links</h2>
+            <p class="text-slate-500 mt-2">Jump directly to your daily actions.</p>
+
+            <div class="mt-5 space-y-3">
+                <a href="{% url 'create_gig' %}" class="block w-full bg-teal-50 hover:bg-teal-100 text-teal-700 border border-teal-200 rounded-xl px-4 py-3 font-semibold transition">
+                    Add New Gig
+                </a>
+                <a href="{% url 'my_orders' %}" class="block w-full bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-xl px-4 py-3 font-semibold transition">
+                    Manage Orders
+                </a>
+                <a href="{% url 'wallet' %}" class="block w-full bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-xl px-4 py-3 font-semibold transition">
+                    Check Wallet
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-7">
+            <h2 class="text-xl font-bold text-slate-800">Orders by Status</h2>
+            <p class="text-slate-500 mt-2">Distribution of your orders across each workflow stage.</p>
+            <div class="mt-6 h-64">
+                <canvas id="studentOrdersChart"></canvas>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-7">
+            <h2 class="text-xl font-bold text-slate-800">Monthly Earnings Trend</h2>
+            <p class="text-slate-500 mt-2">Payouts released to your wallet each month.</p>
+            <div class="mt-6 h-64">
+                <canvas id="studentEarningsChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-7">
+        <div class="flex items-center justify-between gap-4">
+            <div>
+                <h2 class="text-xl font-bold text-slate-800">My Gigs</h2>
+                <p class="text-slate-500 mt-2">Edit or hide your gigs directly from the dashboard.</p>
+            </div>
+            <a href="{% url 'create_gig' %}" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl font-semibold transition">
+                Add Gig
+            </a>
+        </div>
+
+        {% if my_gigs %}
+        <div class="mt-6 overflow-x-auto">
+            <table class="min-w-full text-sm">
+                <thead>
+                    <tr class="text-left text-slate-500 border-b border-slate-200">
+                        <th class="py-3 pr-4 font-semibold">Title</th>
+                        <th class="py-3 pr-4 font-semibold">Status</th>
+                        <th class="py-3 pr-4 font-semibold">Created</th>
+                        <th class="py-3 font-semibold">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for gig in my_gigs %}
+                    <tr class="border-b border-slate-100">
+                        <td class="py-3 pr-4 font-medium text-slate-800">{{ gig.title }}</td>
+                        <td class="py-3 pr-4">
+                            {% if gig.is_active %}
+                            <span class="inline-flex items-center rounded-full bg-emerald-100 text-emerald-700 px-2.5 py-1 text-xs font-semibold">Active</span>
+                            {% else %}
+                            <span class="inline-flex items-center rounded-full bg-slate-200 text-slate-700 px-2.5 py-1 text-xs font-semibold">Hidden</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3 pr-4 text-slate-600">{{ gig.created_at|date:"d M Y" }}</td>
+                        <td class="py-3">
+                            <div class="flex flex-wrap gap-2">
+                                <a href="{% url 'gig_detail' gig.id %}" class="px-3 py-1.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 transition">View</a>
+                                <a href="{% url 'edit_gig' gig.id %}" class="px-3 py-1.5 rounded-lg border border-teal-300 text-teal-700 hover:bg-teal-50 transition">Edit</a>
+                                {% if gig.is_active %}
+                                <a href="{% url 'delete_gig' gig.id %}" class="px-3 py-1.5 rounded-lg border border-red-300 text-red-700 hover:bg-red-50 transition" onclick="return confirm('Hide this gig from public listing?');">Delete</a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="mt-6 text-slate-500">You have not created any gigs yet.</p>
+        {% endif %}
+    </div>
+
+</section>
+
+{{ status_labels|json_script:"student-status-labels" }}
+{{ order_status_counts|json_script:"student-status-counts" }}
+{{ earnings_month_labels|json_script:"student-earnings-labels" }}
+{{ earnings_month_values|json_script:"student-earnings-values" }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const studentStatusLabels = JSON.parse(document.getElementById('student-status-labels').textContent);
+    const studentStatusCounts = JSON.parse(document.getElementById('student-status-counts').textContent);
+    const studentChartElement = document.getElementById('studentOrdersChart');
+    const studentEarningsLabels = JSON.parse(document.getElementById('student-earnings-labels').textContent);
+    const studentEarningsValues = JSON.parse(document.getElementById('student-earnings-values').textContent);
+    const studentEarningsElement = document.getElementById('studentEarningsChart');
+
+    if (studentChartElement) {
+        new Chart(studentChartElement, {
+            type: 'bar',
+            data: {
+                labels: studentStatusLabels,
+                datasets: [{
+                    label: 'Orders',
+                    data: studentStatusCounts,
+                    backgroundColor: ['#f59e0b', '#0ea5e9', '#6366f1', '#10b981', '#ef4444'],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    if (studentEarningsElement) {
+        new Chart(studentEarningsElement, {
+            type: 'line',
+            data: {
+                labels: studentEarningsLabels,
+                datasets: [{
+                    label: 'Earnings (Rs)',
+                    data: studentEarningsValues,
+                    borderColor: '#0d9488',
+                    backgroundColor: 'rgba(13, 148, 136, 0.15)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}

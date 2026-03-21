@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="bg-slate-100 min-h-screen py-16">
+
+<div class="max-w-6xl mx-auto px-6">
+
+<form method="post" enctype="multipart/form-data"
+      class="bg-white border-2 border-slate-300 rounded-2xl shadow-xl p-10 space-y-12">
+
+    {% csrf_token %}
+
+    <!-- HEADER -->
+    <div class="border-b pb-6">
+        <h1 class="text-3xl font-bold text-slate-800">
+            Create New Gig
+        </h1>
+        <p class="text-slate-500 mt-2">
+            Set your pricing tiers and describe your service clearly.
+        </p>
+    </div>
+
+    <!-- BASIC INFO -->
+    <div class="bg-slate-50 border border-slate-200 rounded-xl p-6 space-y-6">
+
+        <h2 class="text-lg font-semibold text-slate-800">
+            Gig Details
+        </h2>
+
+        <div>
+            <label class="block text-slate-700 mb-2">Title</label>
+            {{ form.title }}
+        </div>
+
+        <div>
+            <label class="block text-slate-700 mb-2">Description</label>
+            {{ form.description }}
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-slate-700 mb-2">Category</label>
+                {{ form.category }}
+            </div>
+
+            <div>
+                <label class="block text-slate-700 mb-2">Delivery Time (days)</label>
+                {{ form.delivery_time }}
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= PRICING TIERS ================= -->
+    <div>
+        <h2 class="text-2xl font-bold text-slate-800 mb-8">
+            Pricing Packages
+        </h2>
+
+        <div class="grid md:grid-cols-3 gap-8">
+
+            <!-- BASIC -->
+            <div class="bg-white border border-slate-300 rounded-2xl p-6 shadow hover:shadow-lg transition">
+
+                <h3 class="text-lg font-semibold text-slate-800 mb-4">
+                    Basic
+                </h3>
+
+                <div class="space-y-4">
+
+                    <div>
+                        <label class="block text-sm text-slate-600 mb-1">Price (₹)</label>
+                        {{ form.basic_price }}
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-slate-600 mb-1">Delivery Days</label>
+                        {{ form.basic_delivery }}
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-slate-600 mb-1">Description</label>
+                        {{ form.basic_description }}
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- STANDARD (HIGHLIGHTED) -->
+            <div class="bg-white border-2 border-teal-600 rounded-2xl p-6 shadow-xl scale-105">
+
+                <div class="text-center mb-4">
+                    <span class="bg-teal-600 text-white text-xs px-3 py-1 rounded-full">
+                        MOST POPULAR
+                    </span>
+                </div>
+
+                <h3 class="text-lg font-semibold text-slate-800 mb-4 text-center">
+                    Standard
+                </h3>
+
+                <div class="space-y-4">
+
+                    <div>
+                        <label class="block text-sm text-slate-600 mb-1">Price (₹)</label>
+                        {{ form.standard_price }}
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-slate-600 mb-1">Delivery Days</label>
+                        {{ form.standard_delivery }}
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-slate-600 mb-1">Description</label>
+                        {{ form.standard_description }}
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- PREMIUM -->
+            <div class="bg-white border border-slate-300 rounded-2xl p-6 shadow hover:shadow-lg transition">
+
+                <h3 class="text-lg font-semibold text-slate-800 mb-4">
+                    Premium
+                </h3>
+
+                <div class="space-y-4">
+
+                    <div>
+                        <label class="block text-sm text-slate-600 mb-1">Price (₹)</label>
+                        {{ form.premium_price }}
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-slate-600 mb-1">Delivery Days</label>
+                        {{ form.premium_delivery }}
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-slate-600 mb-1">Description</label>
+                        {{ form.premium_description }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="border-t pt-8 text-right">
+        <button type="submit"
+                class="bg-teal-600 hover:bg-teal-700 text-white px-12 py-3 rounded-full shadow transition font-semibold">
+            Publish Gig
+        </button>
+    </div>
+
+</form>
+
+</div>
+
+</section>
+
+{% endblock %}

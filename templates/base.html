@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stulancer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+
+<!-- ================= NAVBAR ================= -->
+<nav class="bg-white shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+
+        <!-- Logo -->
+        <a href="{% url 'home' %}" class="text-2xl font-bold text-teal-500">
+            Stulancer
+        </a>
+
+        <!-- Navigation Links -->
+        <div class="hidden md:flex items-center gap-8">
+
+            <a href="{% url 'gig_list' %}"
+               class="hover:text-teal-500 transition">
+                Explore
+            </a>
+
+            {% if request.user.is_authenticated %}
+
+                <a href="{% url 'dashboard' %}"
+                   class="hover:text-teal-500 transition">
+                    Dashboard
+                </a>
+
+                <a href="{% url 'my_conversations' %}"
+                   class="hover:text-teal-500 transition">
+                    Messages
+                </a>
+
+                <a href="{% url 'logout' %}"
+                   class="text-red-500 hover:text-red-600 transition">
+                    Logout
+                </a>
+
+            {% else %}
+
+                <a href="{% url 'login' %}"
+                   class="border border-teal-500 text-teal-500 px-4 py-2 rounded-full hover:bg-teal-50 transition">
+                    Login
+                </a>
+
+                <a href="{% url 'register' %}"
+                   class="bg-teal-500 text-white px-6 py-2 rounded-full hover:bg-teal-600 transition">
+                    Register
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+</nav>
+
+
+<!-- ================= CONTENT ================= -->
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+<footer class="bg-gray-900 text-gray-300 py-10 mt-20">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+
+        <h3 class="text-xl font-semibold text-white mb-4">
+            Stulancer
+        </h3>
+
+        <p class="text-sm">
+            Connecting talented students with real-world opportunities.
+        </p>
+
+        <p class="text-sm mt-4 text-gray-500">
+            © 2026 Stulancer. All rights reserved.
+        </p>
+
+    </div>
+</footer>
+
+</body>
+</html>

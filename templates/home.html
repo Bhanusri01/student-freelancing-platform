@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- HERO SECTION -->
+<section class="bg-gray-100 py-24">
+    <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+
+        <div class="text-center lg:text-left">
+            <h1 class="text-5xl font-extrabold text-gray-900 leading-tight">
+                Hire Student Freelancers
+                <span class="text-teal-500">For Real Projects</span>
+            </h1>
+
+            <p class="mt-6 text-lg text-gray-600 max-w-2xl lg:mx-0 mx-auto">
+                Stulancer connects talented students with clients who need
+                modern digital solutions. Fast, affordable, and professional.
+            </p>
+
+            <div class="mt-10 flex flex-wrap justify-center lg:justify-start gap-6">
+                <a href="{% url 'gig_list' %}"
+                   class="bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-full shadow-lg transition">
+                    Explore Gigs
+                </a>
+
+                <a href="{% url 'register' %}"
+                   class="border border-teal-500 text-teal-500 px-8 py-4 rounded-full hover:bg-teal-50 transition">
+                    Join as Freelancer
+                </a>
+            </div>
+        </div>
+
+        <div>
+            <img src="{% static 'images/homepage_pic.jpg' %}"
+                 alt="Stulancer hero"
+                 class="w-full h-[420px] object-cover rounded-3xl shadow-2xl border border-slate-200">
+        </div>
+    </div>
+</section>
+
+
+
+<!-- FEATURED GIGS SECTION -->
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+
+        <h2 class="text-3xl font-bold text-gray-900 mb-12 text-center">
+            Featured Gigs
+        </h2>
+
+        <div class="grid md:grid-cols-3 gap-10">
+
+            {% for item in featured_gigs %}
+
+            <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition border border-gray-200">
+
+                <div class="p-8">
+
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">
+                        {{ item.gig.title }}
+                    </h3>
+
+                    <p class="text-gray-600 text-sm mb-6 line-clamp-3">
+                        {{ item.gig.description|truncatewords:20 }}
+                    </p>
+
+                    <div class="flex justify-between items-center">
+
+                        <span class="text-teal-500 font-semibold">
+                            ₹{{ item.starting_price }}
+                        </span>
+
+                        <span class="text-sm text-gray-500">
+                            ⭐ {{ item.average_rating|floatformat:1 }}
+                        </span>
+
+                    </div>
+
+                    <a href="{% url 'gig_detail' item.gig.id %}"
+                       class="block mt-6 bg-teal-500 hover:bg-teal-600 text-white text-center py-3 rounded-full transition">
+                        View Details
+                    </a>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+                <p class="text-gray-400 col-span-3 text-center">
+                    No featured gigs yet.
+                </p>
+            {% endfor %}
+
+        </div>
+
+    </div>
+</section>
+
+
+
+<!-- WHY STULANCER SECTION -->
+<section class="py-20 bg-gray-100">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+
+        <h2 class="text-3xl font-bold text-gray-900 mb-12">
+            Why Choose Stulancer?
+        </h2>
+
+        <div class="grid md:grid-cols-3 gap-10">
+
+            <div class="bg-white p-8 rounded-2xl shadow">
+                <h3 class="text-xl font-semibold text-teal-500 mb-4">
+                    Affordable Talent
+                </h3>
+                <p class="text-gray-600">
+                    Get high-quality services at student-friendly rates.
+                </p>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow">
+                <h3 class="text-xl font-semibold text-teal-500 mb-4">
+                    Verified Students
+                </h3>
+                <p class="text-gray-600">
+                    Work with verified freelancers from top universities.
+                </p>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow">
+                <h3 class="text-xl font-semibold text-teal-500 mb-4">
+                    Secure Payments
+                </h3>
+                <p class="text-gray-600">
+                    Escrow system ensures safe and transparent transactions.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+
+<!-- CTA FOOTER -->
+<section class="py-20 bg-gray-900 text-white text-center">
+    <h2 class="text-3xl font-bold mb-6">
+        Ready to Get Started?
+    </h2>
+
+    <a href="{% url 'register' %}"
+       class="bg-teal-500 hover:bg-teal-600 px-10 py-4 rounded-full text-lg transition shadow-lg">
+        Create Your Account
+    </a>
+</section>
+
+{% endblock %}
+

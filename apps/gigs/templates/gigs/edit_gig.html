@@ -1,0 +1,37 @@
+<h2>Edit Gig</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    {{ form.title.label }}<br>
+    {{ form.title }}<br><br>
+
+    {{ form.description.label }}<br>
+    {{ form.description }}<br><br>
+
+    {{ form.category.label }}<br>
+    {{ form.category }}<br><br>
+
+    {{ form.delivery_time.label }}<br>
+    {{ form.delivery_time }}<br><br>
+
+    <h3>Basic Package</h3>
+    Price:<br>
+    {{ form.basic_price }}<br>
+    Description:<br>
+    {{ form.basic_description }}<br><br>
+
+    <h3>Standard Package</h3>
+    Price:<br>
+    {{ form.standard_price }}<br>
+    Description:<br>
+    {{ form.standard_description }}<br><br>
+
+    <h3>Premium Package</h3>
+    Price:<br>
+    {{ form.premium_price }}<br>
+    Description:<br>
+    {{ form.premium_description }}<br><br>
+
+    <button type="submit">Update Gig</button>
+</form>
