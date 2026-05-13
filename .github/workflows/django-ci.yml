@@ -1,0 +1,40 @@
+name: Django CI/CD
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+
+jobs:
+  validate-and-build:
+    runs-on: ubuntu-latest
+
+    env:
+      DEBUG: "0"
+      SECRET_KEY: "django-insecure-ci-only-key"
+      ALLOWED_HOSTS: "127.0.0.1,localhost"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Validate Django project
+        run: python manage.py check
+
+      - name: Run tests
+        run: python manage.py test
+
+      - name: Build Docker image
+        run: docker build -t django-freelancing-platform .
