@@ -6,7 +6,7 @@ from django.db import models
 
 class CustomUser(AbstractUser):
     USER_TYPE_CHOICES = (
-        ('student', 'Student Freelancer'),
+        ('student', 'Freelancer'),
         ('client', 'Client'),
     )
 

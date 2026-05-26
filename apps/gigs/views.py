@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Gig, GigTier
+from .models import Category, Gig, GigTier
 from .forms import GigForm
 
 
 # -------------------------------
-# Create Gig (Student Only)
+# Create Gig (Freelancer Only)
 # -------------------------------
 @login_required
 def create_gig(request):
@@ -54,12 +54,29 @@ def create_gig(request):
 # Gig List (Public)
 # -------------------------------
 
-from django.db.models import Avg
+from django.db.models import Avg, Q
 from apps.reviews.models import Review
 
 
 def gig_list(request):
     gigs = Gig.objects.filter(is_active=True)
+    selected_category_id = request.GET.get("category")
+    search_query = request.GET.get("q", "").strip()
+
+    if selected_category_id:
+        gigs = gigs.filter(
+            Q(category_id=selected_category_id) |
+            Q(category__parent_id=selected_category_id)
+        )
+
+    if search_query:
+        gigs = gigs.filter(
+            Q(title__icontains=search_query) |
+            Q(description__icontains=search_query) |
+            Q(category__name__icontains=search_query) |
+            Q(category__parent__name__icontains=search_query) |
+            Q(seller__username__icontains=search_query)
+        )
 
     gig_data = []
 
@@ -86,7 +103,10 @@ def gig_list(request):
 
     return render(request, 'gigs/gig_list.html', {
         'gig_data': gig_data,
-        'featured_gigs': featured_gigs
+        'featured_gigs': featured_gigs,
+        'categories': Category.objects.filter(parent__isnull=True).prefetch_related("subcategories"),
+        'selected_category_id': selected_category_id,
+        'search_query': search_query,
     })
 # -------------------------------
 # Gig Detail

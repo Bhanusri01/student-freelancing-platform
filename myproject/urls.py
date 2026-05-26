@@ -31,6 +31,7 @@ urlpatterns = [
     path('payments/', include('apps.payments.urls')),
     path('reviews/', include('apps.reviews.urls')),
     path('messages/', include('apps.messaging.urls')),
+    path('recommendations/', include('apps.recommendations.urls')),
 
 ]
 

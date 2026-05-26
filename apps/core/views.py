@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.db.models import Avg
-from apps.gigs.models import Gig
+from apps.gigs.models import Category, Gig
 from apps.reviews.models import Review
 
 
@@ -29,5 +29,6 @@ def home(request):
     )[:3]
 
     return render(request, 'home.html', {
-        'featured_gigs': featured_gigs
+        'featured_gigs': featured_gigs,
+        'categories': Category.objects.filter(parent__isnull=True).prefetch_related("subcategories"),
     })

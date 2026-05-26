@@ -37,10 +37,7 @@ def chat_view(request, conversation_id):
     messages = conversation.messages.all().order_by('timestamp')
 
     # 🟢 STEP 3 — Mark messages as seen
-    for message in messages:
-        if message.sender != request.user and not message.is_seen:
-            message.is_seen = True
-            message.save()
+    messages.filter(is_seen=False).exclude(sender=request.user).update(is_seen=True)
 
 
     if request.method == 'POST':
@@ -84,6 +81,7 @@ def my_conversations(request, conversation_id=None):
             return HttpResponseForbidden("Not allowed.")
 
         messages = active_conversation.messages.all().order_by('timestamp')
+        messages.filter(is_seen=False).exclude(sender=request.user).update(is_seen=True)
 
         if request.method == 'POST':
             form = MessageForm(request.POST, request.FILES)

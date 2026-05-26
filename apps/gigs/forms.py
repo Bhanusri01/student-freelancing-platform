@@ -79,7 +79,29 @@ from django import forms
 from .models import Gig, Category
 
 
+class SubCategorySelect(forms.Select):
+    def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
+        option = super().create_option(name, value, label, selected, index, subindex, attrs)
+        category = getattr(value, "instance", None)
+        if category:
+            option["attrs"]["data-parent"] = category.parent_id
+        elif value:
+            try:
+                category = self.choices.queryset.get(pk=value)
+                option["attrs"]["data-parent"] = category.parent_id
+            except (AttributeError, Category.DoesNotExist, ValueError):
+                pass
+        return option
+
+
 class GigForm(forms.ModelForm):
+    main_category = forms.ModelChoiceField(
+        queryset=Category.objects.none(),
+        empty_label="Select category",
+        widget=forms.Select(attrs={
+            'class': 'w-full border border-slate-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-teal-500'
+        })
+    )
 
     # ===== BASIC =====
     basic_price = forms.DecimalField(
@@ -153,7 +175,7 @@ class GigForm(forms.ModelForm):
                 'class': 'w-full border border-slate-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-teal-500',
                 'rows': 5
             }),
-            'category': forms.Select(attrs={
+            'category': SubCategorySelect(attrs={
                 'class': 'w-full border border-slate-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-teal-500'
             }),
             'delivery_time': forms.NumberInput(attrs={
@@ -164,5 +186,33 @@ class GigForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['category'].queryset = Category.objects.all().order_by('name')
-        self.fields['category'].empty_label = "Select category"
+        self.fields['main_category'].queryset = Category.objects.filter(
+            parent__isnull=True
+        ).order_by('name')
+
+        category_field = self.fields['category']
+        category_field.label = "Sub Category"
+        category_field.queryset = Category.objects.filter(
+            parent__isnull=False
+        ).select_related('parent').order_by('parent__name', 'name')
+        category_field.empty_label = "Select sub category"
+        category_field.label_from_instance = lambda obj: obj.name
+
+        if self.instance and self.instance.pk and self.instance.category:
+            self.fields['main_category'].initial = self.instance.category.parent
+
+    def clean_category(self):
+        category = self.cleaned_data.get('category')
+        if category and category.parent_id is None:
+            raise forms.ValidationError("Please select a sub category, not a main category.")
+        return category
+
+    def clean(self):
+        cleaned_data = super().clean()
+        main_category = cleaned_data.get('main_category')
+        sub_category = cleaned_data.get('category')
+
+        if main_category and sub_category and sub_category.parent_id != main_category.id:
+            self.add_error('category', "Please select a sub category from the selected category.")
+
+        return cleaned_data

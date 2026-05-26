@@ -36,7 +36,7 @@
 
                             {% if profile.is_verified %}
                                 <span class="inline-block mt-2 bg-teal-100 text-teal-600 text-xs px-3 py-1 rounded-full">
-                                    ✔ Verified Student
+                                    ✔ Verified Freelancer
                                 </span>
                             {% endif %}
                         </div>
@@ -75,7 +75,7 @@
 
                     <!-- BIO -->
                     <p class="mt-5 text-slate-600 max-w-2xl leading-relaxed">
-                        {{ profile.bio|default:"Freelancer on Qurikly." }}
+                        {{ profile.bio|default:"Freelancer on QurikSpace." }}
                     </p>
 
                     <!-- STATS -->
@@ -183,7 +183,7 @@
                                     <a href="{{ profile.student_id_card.url }}"
                                        target="_blank"
                                        class="block text-teal-600 text-sm font-medium hover:underline">
-                                        View Student ID Card
+                                        View ID Document
                                     </a>
                                 {% endif %}
 
@@ -191,7 +191,7 @@
                                     <a href="{{ profile.enrollment_proof.url }}"
                                        target="_blank"
                                        class="block text-teal-600 text-sm font-medium hover:underline">
-                                        View Enrollment Proof
+                                        View Verification Proof
                                     </a>
                                 {% endif %}
                             </div>

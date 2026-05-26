@@ -9,7 +9,7 @@ class MessageForm(forms.ModelForm):
         widgets = {
             'content': forms.TextInput(attrs={
                 'placeholder': 'Type your message...',
-                'class': 'flex-1 bg-gray-100 border border-gray-300 rounded-full px-6 py-3 focus:outline-none focus:ring-2 focus:ring-teal-500',
+                'class': 'w-full rounded-full border border-ink/10 bg-white px-5 py-3 text-sm font-medium text-ink placeholder:text-ink/35 focus:outline-none focus:ring-2 focus:ring-coral/25',
             }),
             'file': forms.ClearableFileInput(attrs={
                 'class': 'hidden',

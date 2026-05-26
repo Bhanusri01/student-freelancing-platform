@@ -36,6 +36,7 @@ class Message(models.Model):
 
     content = models.TextField(blank=True)
     file = models.FileField(upload_to='chat_files/', blank=True, null=True)
+    is_seen = models.BooleanField(default=False)
 
     timestamp = models.DateTimeField(auto_now_add=True)
 

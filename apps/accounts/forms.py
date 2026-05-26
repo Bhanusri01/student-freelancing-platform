@@ -92,13 +92,13 @@ class ProfileEditForm(forms.ModelForm):
     def clean_student_id_card(self):
         return self._validate_supporting_document(
             self.cleaned_data.get('student_id_card'),
-            'Student ID card'
+            'ID document'
         )
 
     def clean_enrollment_proof(self):
         return self._validate_supporting_document(
             self.cleaned_data.get('enrollment_proof'),
-            'Enrollment proof'
+            'Supporting proof'
         )
 
 

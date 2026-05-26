@@ -79,6 +79,7 @@ INSTALLED_APPS = [
     'apps.dashboard',
     'apps.notifications',
     'apps.core',
+    'apps.recommendations',
 
 ]
 
@@ -105,6 +106,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'apps.core.context_processors.service_categories',
             ],
         },
     },

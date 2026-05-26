@@ -7,9 +7,36 @@ from django.conf import settings
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
+    parent = models.ForeignKey(
+        "self",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="subcategories",
+    )
+
+    class Meta:
+        verbose_name_plural = "Categories"
+        ordering = ["parent__name", "name"]
 
     def __str__(self):
+        if self.parent:
+            return f"{self.parent.name} / {self.name}"
         return self.name
+
+
+class MainCategory(Category):
+    class Meta:
+        proxy = True
+        verbose_name = "Main Category"
+        verbose_name_plural = "Main Categories"
+
+
+class SubCategory(Category):
+    class Meta:
+        proxy = True
+        verbose_name = "Sub Category"
+        verbose_name_plural = "Sub Categories"
 
 
 class Gig(models.Model):
